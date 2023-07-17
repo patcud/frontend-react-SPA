@@ -1,0 +1,42 @@
+$primary-color: #6eda78;
+$secondary-color: #ffa200;
+$white: #ffffff;
+$black: #000000;
+$shape-color: #888888;
+
+header {
+  padding: 0.5em 2em;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(90deg, $primary-color 0%, $secondary-color 100%);
+}
+
+h1 {
+  font-size: xx-large;
+  font-weight: 400;
+}
+
+.container {
+  margin: auto;
+}
+
+.form-field {
+  width: 60%;
+  margin: auto;
+  padding: 1em;
+  border: 2px solid;
+  border-radius: 10px;
+  border-color: $black;
+  &:after {
+    width: 100%;
+  }
+}
+
+.table {
+  width: 80%;
+  margin: auto;
+}
