@@ -15,10 +15,7 @@ export const userSlice = createSlice({
     },
     editUser: (state, action) => {
       const newData = action.payload;
-      console.log('State newData:', newData)
-      console.log('State newData.id:', newData.id)
-      const index = state.findIndex((user) => {user.id == newData.id});
-      console.log('Index: ', index)
+      const index = state.findIndex((user) => user.id == newData.id);
       if (index !== -1) {
         state[index] = { ...state[index], ...newData }
       }

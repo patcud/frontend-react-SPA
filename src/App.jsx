@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
-import { Button, Checkbox, Col, DatePicker, Form, Input, Radio, Row, Space, Select, Table } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Radio, Row, Space, Select, Table } from 'antd';
 import { addUser, removeUser, editUser } from './features/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { v1 as uuid } from 'uuid'
+import dayjs from 'dayjs';
 
 const { Option } = Select;
 
@@ -50,13 +51,12 @@ function App() {
   const formRef = useRef(null);
   const handlePressEdit = (record) => {
     setEditID(record.id);
-    // const birthdate = new Date(record.birthdate)
-    // console.log(`${birthdate.getMonth()}-${birthdate.getDate()}-${birthdate.getFullYear()}`)
+
     formRef.current?.setFieldsValue({
       title: record.title,
       firstname: record.firstname,
       lastname: record.lastname,
-      // birthdate: `${birthdate.getMonth()}-${birthdate.getDate()}-${birthdate.getFullYear()}`,
+      birthdate: dayjs(record.birthdate),
       nationality: record.nationality,
       citizenID1: record.citizenID1,
       citizenID2: record.citizenID2,
@@ -74,23 +74,28 @@ function App() {
   const columns = [
     {
       title: 'ชื่อ',
+      dataIndex: 'name',
       key: 'name',
-      render: (_, record) => `${record.title} ${record.firstname} ${record.lastname}`
+      render: (_, record) => `${record.title} ${record.firstname} ${record.lastname}`,
+      sorter: (a, b) => (a.title + ' ' + a.firstname + ' ' + a.lastname).localeCompare(b.title + ' ' + b.firstname + ' ' + b.lastname),
     },
     {
       title: 'เพศ',
       dataIndex: 'gender',
-      key: 'gender'
+      key: 'gender',
+      sorter: (a, b) => a.gender.localeCompare(b.gender),
     },
     {
       title: 'หมายเลขโทรศัพท์มือถือ',
       key: 'tel',
-      render: (_, record) => `${record.pretel} - ${record.posttel}`
+      render: (_, record) => `${record.pretel} - ${record.posttel}`,
+      sorter: (a, b) => (a.pretel + ' - ' + a.posttel).localeCompare(b.pretel + ' - ' + b.posttel),
     },
     {
       title: 'สัญชาติ',
       dataIndex: 'nationality',
-      key: 'nationality'
+      key: 'nationality',
+      sorter: (a, b) => a.nationality.localeCompare(b.nationality),
     },
     {
       title: 'จัดการ',
@@ -147,6 +152,7 @@ function App() {
       userData.id = uuid();
       dispatch(addUser(userData));
     }
+    form.resetFields();
   };
 
   return (
@@ -157,6 +163,10 @@ function App() {
       <div className="container">
         <div className="form-field">
           <Form form={form} ref={formRef} onFinish={onFinish}>
+            {editID && 
+            <Space style={{ paddingBottom: '1em', color: 'red' }}>
+              แก้ไขข้อมูลของ ID: {editID}
+            </Space>}
             <Row gutter={8}>
               <Col span={6}>
                 <Form.Item
